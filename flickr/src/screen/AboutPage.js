@@ -16,6 +16,19 @@ const AboutPage = () => {
           }}
         />
         <Text style={styles.nameText}>Rahadyan Nandiwardhana</Text>
+        <View style={styles.subContainer}>
+          <Text style={styles.subTitleText}>About Apps</Text>
+          <Text style={styles.detailsText}>
+            A simple mobile app interface using React Native, to show image from
+            Flickr public API using React Hooks with Axios. The interface, about
+            the color scheme, layout, etc were created through personal
+            imagination process. All similarities are just coincidences for
+            educational purposes
+          </Text>
+          <Text style={styles.subTitleText2}>Contact Me!</Text>
+          <Text style={styles.detailsText}>✉️ dhanarahadyan@yahoo.com</Text>
+          <Text style={styles.detailsText}>☎️ +6287871744143</Text>
+        </View>
       </View>
     </View>
   );
@@ -40,10 +53,36 @@ const styles = StyleSheet.create({
     borderColor: '#0063dc',
   },
   nameText: {
-    color: '#0063dc',
+    color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
     marginTop: 10,
+  },
+  subContainer: {
+    width: '85%',
+    borderRadius: 10,
+    paddingHorizontal: '3%',
+    paddingVertical: 10,
+    borderWidth: 1,
+    borderColor: '#ff0084',
+    marginTop: 25,
+  },
+  subTitleText: {
+    color: '#0063dc',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 3,
+  },
+  subTitleText2: {
+    marginTop: 15,
+    color: '#0063dc',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 3,
+  },
+  detailsText: {
+    color: '#fff',
+    textAlign: 'justify',
   },
 });
 

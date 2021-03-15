@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {
-  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -8,21 +7,15 @@ import {
   FlatList,
   TouchableOpacity,
   RefreshControl,
-  ActivityIndicator,
 } from 'react-native';
 import 'react-native-gesture-handler';
 import Axios from 'axios';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 
 //components
-import PostComp from '../component/PostComp';
 import HeaderComp from '../component/HeaderComp';
 
-const wait = (timeout) => {
-  return new Promise((resolve) => setTimeout(resolve, timeout));
-};
-
-const HomePage = () => {
+const HomePage = ({navigation}) => {
   const axios = require('axios');
   const [DATA, setDATA] = useState('');
 
@@ -45,13 +38,6 @@ const HomePage = () => {
 
   const [refreshing, setRefreshing] = React.useState(false);
 
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    wait(1000).then(() => {
-      setRefreshing(false);
-    });
-  }, []);
-
   return (
     <View style={styles.container}>
       <HeaderComp />
@@ -61,7 +47,6 @@ const HomePage = () => {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={() => {
-                // onRefresh();
                 getFlickrItems();
               }}
             />
@@ -69,79 +54,63 @@ const HomePage = () => {
           showsVerticalScrollIndicator={false}
           data={DATA}
           renderItem={({item}) => (
-            <TouchableOpacity>
-              <View style={{borderBottomWidth: 1, borderColor: '#0063dc'}}>
-                <View
-                  style={{
-                    paddingHorizontal: '3%',
-                    paddingVertical: 10,
-                    borderBottomLeftRadius: 50,
-                    borderBottomRightRadius: 50,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}>
-                  <Icons
-                    name="perm-identity"
-                    size={15}
-                    color={'#fff'}
-                    style={{marginRight: 5}}
-                  />
-                  <Text
-                    style={{
-                      color: 'white',
-                      fontWeight: 'bold',
-                    }}>
-                    {item.author.substring(20, item.author.length - 2)}
-                  </Text>
-                </View>
-                <Image
-                  style={{
-                    width: '100%',
-                    height: null,
-                    aspectRatio: 1.78,
-                  }}
-                  source={{
-                    uri: item.media.m,
-                  }}
+            <View style={styles.postContainer}>
+              <View style={styles.postHeaderContainer}>
+                <Icons
+                  name="perm-identity"
+                  size={15}
+                  color={'#fff'}
+                  style={{marginRight: 5}}
                 />
-                <View
-                  style={{
-                    backgroundColor: '#1f1f1f',
-                    paddingVertical: 10,
-                    paddingHorizontal: '3%',
-                  }}>
-                  <Text
-                    style={{
-                      color: '#fff',
-                      fontWeight: 'bold',
-                      textAlign: 'justify',
-                      borderBottomWidth: 1,
-                      borderColor: '#c4c4c4',
-                      paddingBottom: 3,
-                    }}
-                    ellipsizeMode={'tail'}
-                    numberOfLines={1}>
-                    {item.title}
-                  </Text>
-                  <Text
-                    style={{color: '#fff', textAlign: 'justify', marginTop: 3}}
-                    ellipsizeMode={'tail'}
-                    numberOfLines={4}>
-                    {item.tags}
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#c4c4c4',
-                      fontSize: 10,
-                      marginTop: 3,
-                      textAlign: 'right',
-                    }}>
-                    {item.published.substring(11, 16)},{' '}
-                    {item.published.substring(0, 10)}
-                  </Text>
-                </View>
+                <Text style={styles.postProfileText}>
+                  {item.author.substring(20, item.author.length - 2)}
+                </Text>
               </View>
-            </TouchableOpacity>
+              <Image
+                style={styles.postImage}
+                source={{
+                  uri: item.media.m,
+                }}
+              />
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('WebView', {pass: item.link})
+                }>
+                <View style={styles.postSubContainer}>
+                  {item.title.trim().length != 0 ? (
+                    <Text
+                      style={styles.postTitleSubContainer}
+                      ellipsizeMode={'tail'}
+                      numberOfLines={1}>
+                      {item.title}
+                    </Text>
+                  ) : (
+                    <Text style={styles.postTitleSubContainer}>(No Title)</Text>
+                  )}
+                  {item.tags.length != 0 ? (
+                    <Text
+                      style={styles.postDescSubContainer}
+                      ellipsizeMode={'tail'}
+                      numberOfLines={3}>
+                      {item.tags}
+                    </Text>
+                  ) : (
+                    <Text style={styles.postDescSubContainer}>
+                      (No Description)
+                    </Text>
+                  )}
+                  <View style={styles.postFooterContainer}>
+                    <Text style={styles.postDateSubContainer}>
+                      {item.published.substring(11, 16)},{' '}
+                      {item.published.substring(0, 10)}
+                    </Text>
+                    <Text style={styles.postDateSubContainer}>
+                      Tap to open in WebView
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </View>
           )}
           keyExtractor={(item) => item._id}
         />
@@ -159,8 +128,54 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  textBody: {
-    color: '#000',
+  postContainer: {
+    borderBottomWidth: 1,
+    borderColor: '#0063dc',
+  },
+  postHeaderContainer: {
+    paddingHorizontal: '3%',
+    paddingVertical: 10,
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  postProfileText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  postImage: {
+    width: '100%',
+    height: null,
+    aspectRatio: 16 / 9,
+  },
+  postSubContainer: {
+    backgroundColor: '#1f1f1f',
+    paddingVertical: 10,
+    paddingHorizontal: '3%',
+  },
+  postTitleSubContainer: {
+    color: '#fff',
+    fontWeight: 'bold',
+    textAlign: 'justify',
+  },
+  postDescSubContainer: {
+    color: '#fff',
+    textAlign: 'justify',
+    marginTop: 3,
+  },
+  postFooterContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    borderTopWidth: 1,
+    borderColor: '#c4c4c4',
+    paddingVertical: 3,
+    marginTop: 10,
+  },
+  postDateSubContainer: {
+    color: '#c4c4c4',
+    fontSize: 12,
   },
 });
 
