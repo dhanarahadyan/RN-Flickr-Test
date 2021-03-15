@@ -1,10 +1,13 @@
 import * as React from 'react';
 import {ScrollView, StyleSheet, Text, View, Image} from 'react-native';
 import 'react-native-gesture-handler';
+import Axios from 'axios';
 
 //components
 import PostComp from '../component/PostComp';
 import HeaderComp from '../component/HeaderComp';
+
+const axios = require('axios');
 
 const homePage = () => {
   return (
