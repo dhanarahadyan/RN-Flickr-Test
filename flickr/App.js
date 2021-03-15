@@ -5,9 +5,9 @@ import {NavigationContainer} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 //screen
-import homePage from './src/screen/homePage';
-import searchPage from './src/screen/searchPage';
-import aboutPage from './src/screen/aboutPage';
+import HomePage from './src/screen/HomePage';
+import searchPage from './src/screen/SearchPage';
+import aboutPage from './src/screen/AboutPage';
 
 const Tab = createBottomTabNavigator();
 
@@ -37,7 +37,7 @@ const App = () => {
             backgroundColor: '#000',
           },
         }}>
-        <Tab.Screen name="Home" component={homePage} />
+        <Tab.Screen name="Home" component={HomePage} />
         <Tab.Screen name="Search" component={searchPage} />
         <Tab.Screen name="About" component={aboutPage} />
       </Tab.Navigator>

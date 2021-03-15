@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, Image} from 'react-native';
 import 'react-native-gesture-handler';
 import HeaderComp from '../component/HeaderComp';
 
-const homePage = () => {
+const AboutPage = () => {
   return (
     <View style={styles.container}>
       <HeaderComp />
@@ -47,4 +47,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default homePage;
+export default AboutPage;
